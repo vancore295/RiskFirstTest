@@ -22,17 +22,15 @@ namespace RiskFirstTest.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [HttpGet("get-by-city", Name = "GetByCity")]
-        public ActionResult GetAddressByCity()
+        [HttpGet("{city}", Name = "get-by-city")]
+        public ActionResult GetAddressByCity(string city)
         {
-            // List<Address> cities = new List<Address>();
-
             string contentRootPath = _hostingEnvironment.ContentRootPath;
             var JSONString = System.IO.File.ReadAllText(contentRootPath + "/Data/SampleData.json");
-            var sampleData = JsonConvert.DeserializeObject<SampleData>(JSONString);
-            // var cities = JsonConvert.DeserializeObject()
+            SampleData sampleData = JsonConvert.DeserializeObject<SampleData>(JSONString);
+            var results = sampleData.data.Where(p => p.City.ToUpperInvariant() == city.ToUpperInvariant()).GroupBy(a => a.City, (key, g) => new { city = key, address = g.ToList() });
 
-            return Ok(sampleData);
+            return Ok(results);
         }
     }
 }
