@@ -26,6 +26,7 @@ namespace RiskFirstTest.Controllers
         public ActionResult GetAddressByCity(string city)
         {
             string contentRootPath = _hostingEnvironment.ContentRootPath;
+            // var JSONString = System.IO.File.ReadAllText(@"../Data/Saple.json");
             var JSONString = System.IO.File.ReadAllText(contentRootPath + "/Data/SampleData.json");
             SampleData sampleData = JsonConvert.DeserializeObject<SampleData>(JSONString);
             var results = sampleData.data.Where(p => p.City.ToUpperInvariant() == city.ToUpperInvariant()).GroupBy(a => a.City, (key, g) => new { city = key, address = g.ToList() });
